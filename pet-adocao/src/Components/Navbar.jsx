@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function Navbar() {
+  const { user, logout } = useAuth();
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <Link className="navbar-brand" to="/">
@@ -33,7 +36,15 @@ function Navbar() {
               Institucional
             </a>
             <div className="dropdown-menu" aria-labelledby="navbarDropdownInstitucional">
-              <Link className="dropdown-item" to="/adicionar-pet">Adicionar pet</Link>
+              {user && (
+                <>
+                  <Link className="dropdown-item" to="/adicionar-pet">Adicionar pet</Link>
+                  <Link className="dropdown-item" to="/gerenciar-voluntarios">Gerenciar Voluntários</Link>
+                  <Link className="dropdown-item" to="/gerenciar-adocoes">Gerenciar Adoções</Link>
+                  <Link className="dropdown-item" to="/relatorio">Relatórios (JOIN)</Link>
+                  <div className="dropdown-divider"></div>
+                </>
+              )}
               <a
                 className="dropdown-item"
                 href="https://observatorio3setor.org.br/lista-conheca-7-ongs-brasileiras-que-atuam-na-protecao-de-animais/"
@@ -42,7 +53,6 @@ function Navbar() {
               >
                 Projetos sociais
               </a>
-              <div className="dropdown-divider"></div>
             </div>
           </li>
 
@@ -78,9 +88,22 @@ function Navbar() {
         <Link to="/quero-adotar" className="btn btn-outline-info mr-2">
           Quero adotar
         </Link>
-        <Link to="/seja-voluntario" className="btn btn-outline-warning">
+        <Link to="/seja-voluntario" className="btn btn-outline-warning mr-3">
           Seja voluntário
         </Link>
+
+        {user ? (
+          <div className="d-flex align-items-center">
+            <span className="text-muted mr-3">{user.email}</span>
+            <button className="btn btn-danger btn-sm" onClick={logout}>
+              Sair
+            </button>
+          </div>
+        ) : (
+          <Link to="/login" className="btn btn-outline-primary btn-sm">
+            Entrar
+          </Link>
+        )}
       </div>
     </nav>
   );

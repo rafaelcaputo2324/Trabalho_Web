@@ -11,10 +11,16 @@ import FAQ from "./pages/FAQ";
 import SejaVoluntarioInfo from "./pages/SejaVoluntarioInfo";
 import FormularioVoluntario from "./pages/FormularioVoluntario";
 import FimInscricao from "./pages/FimInscricao";
+import Login from "./pages/Login";
+import GerenciarVoluntarios from "./pages/GerenciarVoluntarios";
+import GerenciarAdocoes from "./pages/GerenciarAdocoes";
+import Relatorio from "./pages/Relatorio";
+import ProtectedRoute from "./Components/ProtectedRoute";
+import { AuthProvider } from "./context/AuthContext";
 
 function App() {
   return (
-    <>
+    <AuthProvider>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -23,13 +29,51 @@ function App() {
         <Route path="/formulario-adocao-1" element={<FormAdocao1 />} />
         <Route path="/formulario-adocao-2" element={<FormAdocao2 />} />
         <Route path="/confirmacao-adocao" element={<FimAdocao />} />
-        <Route path="/adicionar-pet" element={<AddPet />} />
+        
+        <Route
+          path="/adicionar-pet"
+          element={
+            <ProtectedRoute>
+              <AddPet />
+            </ProtectedRoute>
+          }
+        />
+        
         <Route path="/faq" element={<FAQ />} />
         <Route path="/seja-voluntario" element={<SejaVoluntarioInfo />} />
         <Route path="/formulario-voluntario" element={<FormularioVoluntario />} />
         <Route path="/confirmacao-voluntario" element={<FimInscricao />} />
+        
+        <Route path="/login" element={<Login />} />
+        
+        <Route
+          path="/gerenciar-voluntarios"
+          element={
+            <ProtectedRoute>
+              <GerenciarVoluntarios />
+            </ProtectedRoute>
+          }
+        />
+        
+        <Route
+          path="/gerenciar-adocoes"
+          element={
+            <ProtectedRoute>
+              <GerenciarAdocoes />
+            </ProtectedRoute>
+          }
+        />
+        
+        <Route
+          path="/relatorio"
+          element={
+            <ProtectedRoute>
+              <Relatorio />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
-    </>
+    </AuthProvider>
   );
 }
 
