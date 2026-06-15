@@ -12,25 +12,24 @@
  
   }
 
-  .container {
+  .pet-container {
     display: flex;
-    flex-wrap: wrap; /* Permite que os cards quebrem para a linha seguinte se não caberem */
-    justify-content: space-between; /* Espaça igualmente os cards */
- 
-    gap: 20px; /* Espaçamento entre os cards */
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
   }
 
-  .card {
+  .pet-card {
     background-color: white;
-    border-radius: 10px; /* Arredonda os cantos do card */
-    width: 22%; /* Define a largura dos cards */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra suave ao redor do card */
+    border-radius: 10px;
+    width: 22%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    transition: transform 0.3s ease; /* Transição suave para o efeito de hover */
+    transition: transform 0.3s ease;
   }
 
-  .card:hover {
-    transform: translateY(-10px); /* Efeito de elevação ao passar o mouse */
+  .pet-card:hover {
+    transform: translateY(-10px);
   }
 
   .card-img-top {
