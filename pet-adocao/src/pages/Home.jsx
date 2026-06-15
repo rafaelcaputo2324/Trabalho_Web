@@ -15,16 +15,16 @@ function Home() {
         </ol>
         <div className="carousel-inner">
           <div className="carousel-item active">
-            <img className="d-block w-100" src="/img/1.png" alt="Primeiro Slide" style={{ height: "650px", objectFit: "cover" }} />
+            <img className="d-block w-100" src="/img/1.png" alt="Primeiro Slide" style={{ height: "100%", objectFit: "cover" }} />
           </div>
           <div className="carousel-item">
-            <img className="d-block w-100" src="/img/2.png" alt="Segundo Slide" style={{ height: "650px", objectFit: "cover" }} />
+            <img className="d-block w-100" src="/img/2.png" alt="Segundo Slide" style={{ height: "100%", objectFit: "cover" }} />
           </div>
           <div className="carousel-item">
-            <img className="d-block w-100" src="/img/3.png" alt="Terceiro Slide" style={{ height: "650px", objectFit: "cover" }} />
+            <img className="d-block w-100" src="/img/3.png" alt="Terceiro Slide" style={{ height: "100%", objectFit: "cover" }} />
           </div>
           <div className="carousel-item">
-            <img className="d-block w-100" src="/img/Banner promoção pet shop divertido amarelo.png" alt="Quarto Slide" style={{ height: "650px", objectFit: "cover" }} />
+            <img className="d-block w-100" src="/img/Banner promoção pet shop divertido amarelo.png" alt="Quarto Slide" style={{ height: "100%", objectFit: "cover" }} />
           </div>
         </div>
         <a className="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">

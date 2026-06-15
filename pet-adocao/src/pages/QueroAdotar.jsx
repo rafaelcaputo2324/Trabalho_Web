@@ -66,8 +66,8 @@ export default function QueroAdotar() {
 
       <div className="container">
         {pets.map((pet) => (
-          <div className="card m-2" key={pet.id} style={{ width: "18rem" }}>
-            <img className="card-img-top" src={pet.img || "/img/logo1.png"} alt={pet.nome} style={{ height: "200px", objectFit: "cover" }} />
+          <div className="card" key={pet.id}>
+            <img className="card-img-top" src={pet.img || "/img/logo1.png"} alt={pet.nome} style={{ objectFit: "cover" }} />
             <div className="card-body">
               <h5 className="card-title">{pet.nome}</h5>
               <p className="card-text">
