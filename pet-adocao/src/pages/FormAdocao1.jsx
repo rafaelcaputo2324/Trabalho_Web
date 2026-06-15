@@ -1,13 +1,12 @@
 import { Link } from "react-router-dom";
 import "../src_styles/form.css";
 
-function FormAdocao1() {
+export default function FormAdocao1() {
   return (
-    <>
-      <br /><br />
-      <h2> Queremos saber mais sobre você</h2>
+    <div className="container my-5" style={{ maxWidth: "700px" }}>
+      <h2 className="text-center mb-4">Queremos saber mais sobre você</h2>
 
-      <form>
+      <form className="p-4 bg-white rounded shadow-sm">
         <div className="form-row">
           <div className="form-group col-md-6">
             <label htmlFor="inputNome">Nome</label>
@@ -38,7 +37,9 @@ function FormAdocao1() {
             <label htmlFor="inputEstado">Estado</label>
             <select id="inputEstado" className="form-control">
               <option defaultValue>Escolher...</option>
-              <option>...</option>
+              <option>Distrito Federal</option>
+              <option>Goiás</option>
+              <option>Outro</option>
             </select>
           </div>
           <div className="form-group col-md-2">
@@ -47,12 +48,12 @@ function FormAdocao1() {
           </div>
         </div>
 
-        <Link to="/formulario-adocao-2" className="but">
-          Confirmar
-        </Link>
+        <div className="text-center mt-4">
+          <Link to="/formulario-adocao-2" className="btn text-white w-50" style={{ backgroundColor: "rgb(235, 167, 104)" }}>
+            Confirmar
+          </Link>
+        </div>
       </form>
-    </>
+    </div>
   );
 }
-
-export default FormAdocao1;

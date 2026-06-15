@@ -5,8 +5,9 @@ body {
 
   .interesse {
     text-align: center;
-    height: 80%; /* Define a altura total da página */
-    margin: 150px;    /* Remove a margem padrão */
+    margin: 40px auto;
+    max-width: 800px;
+    padding: 0 20px;
   }
   .form-check{
     background-color: rgb(235, 167, 104);
