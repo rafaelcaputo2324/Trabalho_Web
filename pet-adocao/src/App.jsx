@@ -7,6 +7,7 @@ import FormAdocao1 from "./pages/FormAdocao1";
 import FormAdocao2 from "./pages/FormAdocao2";
 import FimAdocao from "./pages/FimAdocao";
 import AddPet from "./pages/AddPet";
+import GerenciarPets from "./pages/GerenciarPets";
 import FAQ from "./pages/FAQ";
 import SejaVoluntarioInfo from "./pages/SejaVoluntarioInfo";
 import FormularioVoluntario from "./pages/FormularioVoluntario";
@@ -15,6 +16,7 @@ import Login from "./pages/Login";
 import GerenciarVoluntarios from "./pages/GerenciarVoluntarios";
 import GerenciarAdocoes from "./pages/GerenciarAdocoes";
 import Relatorio from "./pages/Relatorio";
+import GuiaRacas from "./pages/GuiaRacas";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 
@@ -30,6 +32,22 @@ function App() {
         <Route path="/formulario-adocao-2" element={<FormAdocao2 />} />
         <Route path="/confirmacao-adocao" element={<FimAdocao />} />
         
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/seja-voluntario" element={<SejaVoluntarioInfo />} />
+        <Route path="/formulario-voluntario" element={<FormularioVoluntario />} />
+        <Route path="/confirmacao-voluntario" element={<FimInscricao />} />
+        
+        <Route path="/guia-racas" element={<GuiaRacas />} />
+        <Route path="/login" element={<Login />} />
+        
+        <Route
+          path="/gerenciar-pets"
+          element={
+            <ProtectedRoute>
+              <GerenciarPets />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/adicionar-pet"
           element={
@@ -38,14 +56,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-        
-        <Route path="/faq" element={<FAQ />} />
-        <Route path="/seja-voluntario" element={<SejaVoluntarioInfo />} />
-        <Route path="/formulario-voluntario" element={<FormularioVoluntario />} />
-        <Route path="/confirmacao-voluntario" element={<FimInscricao />} />
-        
-        <Route path="/login" element={<Login />} />
-        
         <Route
           path="/gerenciar-voluntarios"
           element={
@@ -54,7 +64,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-        
         <Route
           path="/gerenciar-adocoes"
           element={
@@ -63,7 +72,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-        
         <Route
           path="/relatorio"
           element={

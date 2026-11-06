@@ -107,7 +107,7 @@ export default function GerenciarAdocoes() {
   return (
     <div className="container my-5">
       <h2 className="text-center mb-4" style={{ fontFamily: "'Baloo', cursive", color: "#6f42c1" }}>
-        Gerenciamento de Adoções (CRUD 3)
+        Gerenciamento de Adoções
       </h2>
 
       <div className="row">

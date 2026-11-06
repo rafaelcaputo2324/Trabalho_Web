@@ -75,7 +75,7 @@ export default function QueroAdotar() {
                 {pet.desc}
               </p>
               <div className="d-flex flex-wrap gap-2 justify-content-between">
-                <Link to="/termo-adocao" className="btn btn-info btn-sm">
+                <Link to={`/formulario-adocao-1?petId=${pet.id}`} className="btn btn-info btn-sm">
                   Quero Adotar
                 </Link>
                 {user && (

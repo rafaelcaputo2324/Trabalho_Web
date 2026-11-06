@@ -48,7 +48,7 @@ export default function Relatorio() {
   return (
     <div className="container my-5">
       <h2 className="text-center mb-4" style={{ fontFamily: "'Baloo', cursive", color: "#6f42c1" }}>
-        Relatório Consolidado de Adoções (JOIN entre Entidades)
+        Relatório Consolidado de Adoções
       </h2>
 
       <div className="card shadow-sm border-0 p-4 mb-4" style={{ borderRadius: "15px" }}>
