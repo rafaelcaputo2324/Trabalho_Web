@@ -1,39 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useDadosLocais } from "../hooks/useBancoLocal";
+import { relatorioAdocoes } from "../services/repositorio";
 
 export default function Relatorio() {
-  const [reportData, setReportData] = useState([]);
+  const reportData = useDadosLocais(relatorioAdocoes);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("Todos");
-
-  useEffect(() => {
-    const savedAdoptions = localStorage.getItem("cafofo_adoptions")
-      ? JSON.parse(localStorage.getItem("cafofo_adoptions"))
-      : [];
-    const savedPets = localStorage.getItem("cafofo_pets")
-      ? JSON.parse(localStorage.getItem("cafofo_pets"))
-      : [];
-    const savedVolunteers = localStorage.getItem("cafofo_volunteers")
-      ? JSON.parse(localStorage.getItem("cafofo_volunteers"))
-      : [];
-
-    const joined = savedAdoptions.map((a) => {
-      const pet = savedPets.find((p) => p.id === a.petId) || {};
-      const volunteer = savedVolunteers.find((v) => v.id === a.volunteerId) || {};
-
-      return {
-        id: a.id,
-        petNome: pet.nome || "Não encontrado",
-        petTipo: pet.tipo || "Gato/Cachorro",
-        adotanteNome: volunteer.nome || "Não encontrado",
-        adotanteEmail: volunteer.email || "Não encontrado",
-        adotanteTelefone: volunteer.telefone || "Não encontrado",
-        data: a.data,
-        status: a.status
-      };
-    });
-
-    setReportData(joined);
-  }, []);
 
   const filteredData = reportData.filter((item) => {
     const matchesSearch =

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { fetchDogBreeds, fetchDogBreedImage } from "../services/api";
+import { buscarPorId, inserir, atualizar } from "../services/repositorio";
 import "../src_styles/pet.css";
 
 export default function AddPet() {
@@ -28,18 +29,14 @@ export default function AddPet() {
     });
 
     if (petId) {
-      const savedPets = localStorage.getItem("cafofo_pets");
-      if (savedPets) {
-        const petsList = JSON.parse(savedPets);
-        const petToEdit = petsList.find((p) => p.id === petId);
-        if (petToEdit) {
-          setNome(petToEdit.nome);
-          setIdade(petToEdit.idade);
-          setDesc(petToEdit.desc);
-          setImg(petToEdit.img || "");
-          if (petToEdit.tipo) setTipo(petToEdit.tipo);
-          if (petToEdit.raca) setRaca(petToEdit.raca);
-        }
+      const petToEdit = buscarPorId("pets", petId);
+      if (petToEdit) {
+        setNome(petToEdit.nome);
+        setIdade(petToEdit.idade);
+        setDesc(petToEdit.desc);
+        setImg(petToEdit.img || "");
+        if (petToEdit.tipo) setTipo(petToEdit.tipo);
+        if (petToEdit.raca) setRaca(petToEdit.raca);
       }
     }
   }, [petId]);
@@ -75,31 +72,20 @@ export default function AddPet() {
       return;
     }
 
-    const savedPets = localStorage.getItem("cafofo_pets");
-    const petsList = savedPets ? JSON.parse(savedPets) : [];
-
     if (petId) {
-      const updatedPets = petsList.map((p) => {
-        if (p.id === petId) {
-          return { ...p, nome, tipo, raca, idade, desc, img: img || p.img };
-        }
-        return p;
-      });
-      localStorage.setItem("cafofo_pets", JSON.stringify(updatedPets));
+      const petAtual = buscarPorId("pets", petId);
+      atualizar("pets", petId, { nome, tipo, raca, idade, desc, img: img || petAtual?.img });
       setSuccess("Pet atualizado com sucesso!");
     } else {
-      const newPet = {
-        id: Date.now().toString(),
+      inserir("pets", {
         nome,
         tipo,
         raca: raca || "Mestiço / SRD",
         idade,
         desc,
         img: img || "/img/logo1.png",
-      };
-      petsList.push(newPet);
-      localStorage.setItem("cafofo_pets", JSON.stringify(petsList));
-      setSuccess("Pet cadastrado com sucesso!");
+      });
+      setSuccess(navigator.onLine ? "Pet cadastrado com sucesso!" : "Sem internet: pet salvo no aparelho e será enviado quando a conexão voltar.");
     }
 
     setTimeout(() => {

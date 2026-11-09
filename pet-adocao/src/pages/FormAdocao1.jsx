@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { fetchAddressByCep } from "../services/api";
+import { useTabela } from "../hooks/useBancoLocal";
 import "../src_styles/form.css";
 
 export default function FormAdocao1() {
@@ -18,17 +19,10 @@ export default function FormAdocao1() {
   const [cidade, setCidade] = useState("");
   const [estado, setEstado] = useState("Distrito Federal");
   const [selectedPetId, setSelectedPetId] = useState(petIdParam);
-  const [pets, setPets] = useState([]);
+  const pets = useTabela("pets");
   const [cepLoading, setCepLoading] = useState(false);
   const [cepMessage, setCepMessage] = useState("");
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    const savedPets = localStorage.getItem("cafofo_pets");
-    if (savedPets) {
-      setPets(JSON.parse(savedPets));
-    }
-  }, []);
 
   const handleCepSearch = async () => {
     if (!cep) return;

@@ -1,4 +1,11 @@
 {
+  "name": "trabalho-web",
+  "private": true,
+  "scripts": {
+    "postinstall": "npm install --prefix pet-adocao",
+    "dev": "npm run dev --prefix pet-adocao",
+    "build": "npm run build --prefix pet-adocao"
+  },
   "dependencies": {
     "react-router-dom": "^7.16.0"
   }

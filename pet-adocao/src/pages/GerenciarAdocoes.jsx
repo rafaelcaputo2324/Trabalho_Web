@@ -1,13 +1,11 @@
-import { useState, useEffect } from "react";
-
-const initialAdoptions = [
-  { id: "1", petId: "1", volunteerId: "1", data: "2026-06-15", status: "Aprovada" }
-];
+import { useState } from "react";
+import { useTabela } from "../hooks/useBancoLocal";
+import { inserir, atualizar, excluir } from "../services/repositorio";
 
 export default function GerenciarAdocoes() {
-  const [adoptions, setAdoptions] = useState([]);
-  const [pets, setPets] = useState([]);
-  const [volunteers, setVolunteers] = useState([]);
+  const adoptions = useTabela("adocoes");
+  const pets = useTabela("pets");
+  const volunteers = useTabela("voluntarios");
 
   const [petId, setPetId] = useState("");
   const [volunteerId, setVolunteerId] = useState("");
@@ -15,31 +13,6 @@ export default function GerenciarAdocoes() {
   const [status, setStatus] = useState("Pendente");
   const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    const savedAdoptions = localStorage.getItem("cafofo_adoptions");
-    if (savedAdoptions) {
-      setAdoptions(JSON.parse(savedAdoptions));
-    } else {
-      localStorage.setItem("cafofo_adoptions", JSON.stringify(initialAdoptions));
-      setAdoptions(initialAdoptions);
-    }
-
-    const savedPets = localStorage.getItem("cafofo_pets");
-    if (savedPets) {
-      setPets(JSON.parse(savedPets));
-    }
-
-    const savedVolunteers = localStorage.getItem("cafofo_volunteers");
-    if (savedVolunteers) {
-      setVolunteers(JSON.parse(savedVolunteers));
-    }
-  }, []);
-
-  const saveToLocalStorage = (list) => {
-    setAdoptions(list);
-    localStorage.setItem("cafofo_adoptions", JSON.stringify(list));
-  };
 
   const clearForm = () => {
     setPetId("");
@@ -59,22 +32,11 @@ export default function GerenciarAdocoes() {
       return;
     }
 
+    const dados = { petId, volunteerId, data: dataAdocao, status };
     if (editingId) {
-      const updated = adoptions.map((a) =>
-        a.id === editingId
-          ? { ...a, petId, volunteerId, data: dataAdocao, status }
-          : a
-      );
-      saveToLocalStorage(updated);
+      atualizar("adocoes", editingId, dados);
     } else {
-      const newAdocao = {
-        id: Date.now().toString(),
-        petId,
-        volunteerId,
-        data: dataAdocao,
-        status
-      };
-      saveToLocalStorage([...adoptions, newAdocao]);
+      inserir("adocoes", dados);
     }
     clearForm();
   };
@@ -89,8 +51,7 @@ export default function GerenciarAdocoes() {
 
   const handleDelete = (id) => {
     if (window.confirm("Deseja realmente remover este registro de adoção?")) {
-      const filtered = adoptions.filter((a) => a.id !== id);
-      saveToLocalStorage(filtered);
+      excluir("adocoes", id);
     }
   };
 

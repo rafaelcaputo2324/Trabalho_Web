@@ -72,6 +72,9 @@ function Navbar() {
                     <Link className="dropdown-item" to="/relatorio">
                       📊 Relatório Consolidado
                     </Link>
+                    <Link className="dropdown-item" to="/banco-local">
+                      🗄️ Banco Local (SQLite)
+                    </Link>
                     <div className="dropdown-divider"></div>
                   </>
                 ) : (

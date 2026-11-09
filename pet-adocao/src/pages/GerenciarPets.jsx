@@ -1,39 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ReusableTable from "../Components/ReusableTable";
-
-const initialPets = [
-  { id: "1", nome: "Alex", tipo: "Gato", raca: "SRD", idade: "6 meses", desc: "Alex é o explorador do grupo!", img: "/img/alex.png" },
-  { id: "2", nome: "Sicha", tipo: "Gato", raca: "Siamês", idade: "3 meses", desc: "Sicha é pura fofura! Meiga e carinhosa.", img: "/img/sicha.png" },
-  { id: "3", nome: "Mel", tipo: "Cachorro", raca: "Golden", idade: "8 Meses", desc: "Mel é um encanto! Alegre e delicada.", img: "/img/Mel.png" },
-  { id: "4", nome: "Bob", tipo: "Cachorro", raca: "Labrador", idade: "10 meses", desc: "Bob é muito animado, tem muita energia!", img: "/img/bob.png" }
-];
+import { useTabela } from "../hooks/useBancoLocal";
+import { excluir } from "../services/repositorio";
 
 export default function GerenciarPets() {
-  const [pets, setPets] = useState([]);
+  const pets = useTabela("pets");
   const [searchTerm, setSearchTerm] = useState("");
   const [filterTipo, setFilterTipo] = useState("Todos");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const saved = localStorage.getItem("cafofo_pets");
-    if (saved) {
-      setPets(JSON.parse(saved));
-    } else {
-      localStorage.setItem("cafofo_pets", JSON.stringify(initialPets));
-      setPets(initialPets);
-    }
-  }, []);
-
-  const saveToLocalStorage = (list) => {
-    setPets(list);
-    localStorage.setItem("cafofo_pets", JSON.stringify(list));
-  };
-
   const handleDelete = (id) => {
     if (window.confirm("Deseja realmente remover este pet do sistema?")) {
-      const updated = pets.filter((p) => p.id !== id);
-      saveToLocalStorage(updated);
+      excluir("pets", id);
     }
   };
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchAddressByCep } from "../services/api";
+import { inserir } from "../services/repositorio";
 import "../src_styles/qp.css";
 import "../src_styles/BN.css";
 import "../src_styles/css.css";
@@ -49,13 +50,9 @@ export default function FormularioVoluntario() {
       return;
     }
 
-    const saved = localStorage.getItem("cafofo_volunteers");
-    const list = saved ? JSON.parse(saved) : [];
-
     const fullEndereco = bairro || cidade ? `${endereco}, ${bairro} - ${cidade}` : endereco;
 
-    const newVol = {
-      id: Date.now().toString(),
+    inserir("voluntarios", {
       nome,
       telefone,
       email,
@@ -64,10 +61,7 @@ export default function FormularioVoluntario() {
       endereco: fullEndereco,
       tempo,
       genero
-    };
-
-    list.push(newVol);
-    localStorage.setItem("cafofo_volunteers", JSON.stringify(list));
+    });
     navigate("/confirmacao-voluntario");
   };
 

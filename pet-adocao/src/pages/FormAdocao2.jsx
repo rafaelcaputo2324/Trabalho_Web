@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { buscarPorId, listar, inserir } from "../services/repositorio";
 import "../src_styles/form2.css";
 
 export default function FormAdocao2() {
@@ -15,12 +16,8 @@ export default function FormAdocao2() {
       const parsed = JSON.parse(raw);
       setTempData(parsed);
 
-      const savedPets = localStorage.getItem("cafofo_pets");
-      if (savedPets) {
-        const petsList = JSON.parse(savedPets);
-        const found = petsList.find((p) => p.id === parsed.petId);
-        if (found) setPet(found);
-      }
+      const found = buscarPorId("pets", parsed.petId);
+      if (found) setPet(found);
     } else {
       // Se não preencheu a etapa 1, redireciona
       navigate("/formulario-adocao-1");
@@ -37,13 +34,10 @@ export default function FormAdocao2() {
     if (!tempData) return;
 
     // 1. Cadastra ou localiza o adotante na lista de voluntários/contatos (CRUD 2)
-    const rawVolunteers = localStorage.getItem("cafofo_volunteers");
-    const volunteersList = rawVolunteers ? JSON.parse(rawVolunteers) : [];
-    let adopter = volunteersList.find((v) => v.email === tempData.email);
+    let adopter = listar("voluntarios").find((v) => v.email === tempData.email);
 
     if (!adopter) {
-      adopter = {
-        id: Date.now().toString(),
+      adopter = inserir("voluntarios", {
         nome: tempData.nome,
         email: tempData.email,
         telefone: tempData.telefone,
@@ -51,26 +45,17 @@ export default function FormAdocao2() {
         idade: "25",
         tempo: "Adotante",
         genero: "Outro"
-      };
-      volunteersList.push(adopter);
-      localStorage.setItem("cafofo_volunteers", JSON.stringify(volunteersList));
+      });
     }
 
     // 2. Registra o pedido no CRUD de Adoções (CRUD 3)
-    const rawAdoptions = localStorage.getItem("cafofo_adoptions");
-    const adoptionsList = rawAdoptions ? JSON.parse(rawAdoptions) : [];
-
-    const newAdoption = {
-      id: Date.now().toString(),
+    inserir("adocoes", {
       petId: tempData.petId,
       volunteerId: adopter.id,
       data: new Date().toISOString().split("T")[0],
       status: "Pendente",
       motivo: motivo.trim()
-    };
-
-    adoptionsList.push(newAdoption);
-    localStorage.setItem("cafofo_adoptions", JSON.stringify(adoptionsList));
+    });
 
     // Limpa dados temporários
     localStorage.removeItem("cafofo_adocao_temp");

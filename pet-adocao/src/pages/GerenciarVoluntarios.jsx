@@ -1,14 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ReusableTable from "../Components/ReusableTable";
 import { fetchAddressByCep } from "../services/api";
-
-const initialVolunteers = [
-  { id: "1", nome: "Mariana Silva", telefone: "(61) 98888-8888", email: "mariana@gmail.com", idade: "25", endereco: "Quadra 102 Sul, DF", tempo: "Tarde", genero: "Mulher" },
-  { id: "2", nome: "Carlos Souza", telefone: "(61) 97777-7777", email: "carlos@gmail.com", idade: "34", endereco: "Rua das Flores, 12", tempo: "Manhã", genero: "Homem" }
-];
+import { useTabela } from "../hooks/useBancoLocal";
+import { inserir, atualizar, excluir } from "../services/repositorio";
 
 export default function GerenciarVoluntarios() {
-  const [volunteers, setVolunteers] = useState([]);
+  const volunteers = useTabela("voluntarios");
   const [nome, setNome] = useState("");
   const [telefone, setTelefone] = useState("");
   const [email, setEmail] = useState("");
@@ -21,21 +18,6 @@ export default function GerenciarVoluntarios() {
   const [error, setError] = useState("");
   const [cepLoading, setCepLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-
-  useEffect(() => {
-    const saved = localStorage.getItem("cafofo_volunteers");
-    if (saved) {
-      setVolunteers(JSON.parse(saved));
-    } else {
-      localStorage.setItem("cafofo_volunteers", JSON.stringify(initialVolunteers));
-      setVolunteers(initialVolunteers);
-    }
-  }, []);
-
-  const saveToLocalStorage = (list) => {
-    setVolunteers(list);
-    localStorage.setItem("cafofo_volunteers", JSON.stringify(list));
-  };
 
   const handleCepSearch = async () => {
     if (!cep) return;
@@ -72,26 +54,11 @@ export default function GerenciarVoluntarios() {
       return;
     }
 
+    const dados = { nome, telefone, email, idade, cep, endereco, tempo, genero };
     if (editingId) {
-      const updated = volunteers.map((v) =>
-        v.id === editingId
-          ? { ...v, nome, telefone, email, idade, cep, endereco, tempo, genero }
-          : v
-      );
-      saveToLocalStorage(updated);
+      atualizar("voluntarios", editingId, dados);
     } else {
-      const newVol = {
-        id: Date.now().toString(),
-        nome,
-        telefone,
-        email,
-        idade,
-        cep,
-        endereco,
-        tempo,
-        genero
-      };
-      saveToLocalStorage([...volunteers, newVol]);
+      inserir("voluntarios", dados);
     }
     clearForm();
   };
@@ -110,8 +77,7 @@ export default function GerenciarVoluntarios() {
 
   const handleDelete = (id) => {
     if (window.confirm("Deseja realmente remover este voluntário?")) {
-      const filtered = volunteers.filter((v) => v.id !== id);
-      saveToLocalStorage(filtered);
+      excluir("voluntarios", id);
     }
   };
 

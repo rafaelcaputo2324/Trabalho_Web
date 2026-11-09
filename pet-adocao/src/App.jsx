@@ -17,13 +17,16 @@ import GerenciarVoluntarios from "./pages/GerenciarVoluntarios";
 import GerenciarAdocoes from "./pages/GerenciarAdocoes";
 import Relatorio from "./pages/Relatorio";
 import GuiaRacas from "./pages/GuiaRacas";
+import BancoLocal from "./pages/BancoLocal";
 import ProtectedRoute from "./Components/ProtectedRoute";
+import SyncStatus from "./Components/SyncStatus";
 import { AuthProvider } from "./context/AuthContext";
 
 function App() {
   return (
     <AuthProvider>
       <Navbar />
+      <SyncStatus />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/quero-adotar" element={<QueroAdotar />} />
@@ -77,6 +80,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Relatorio />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/banco-local"
+          element={
+            <ProtectedRoute>
+              <BancoLocal />
             </ProtectedRoute>
           }
         />

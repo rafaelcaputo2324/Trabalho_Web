@@ -1,43 +1,17 @@
-import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useTabela } from "../hooks/useBancoLocal";
+import { excluir } from "../services/repositorio";
 import "../src_styles/css1.css";
 
-const initialPets = [
-  { id: "1", nome: "Alex", img: "/img/alex.png", idade: "6 meses", desc: "Alex é o explorador do grupo!" },
-  { id: "2", nome: "Sicha", img: "/img/sicha.png", idade: "3 meses", desc: "Sicha é pura fofura! Meiga e carinhosa, ela adora um carinho!" },
-  { id: "3", nome: "Mel", img: "/img/Mel.png", idade: "8 Meses", desc: "Mel é um encanto! Alegre e delicada." },
-  { id: "4", nome: "Rosa", img: "/img/Rosa.png", idade: "1 ano", desc: "Rosa é um amor!" },
-  { id: "5", nome: "Bob", img: "/img/bob.png", idade: "10 meses", desc: "Bob é muito animado, tem muita energia pra gastar!" },
-  { id: "6", nome: "Will", img: "/img/Will.png", idade: "2 anos", desc: "Will é o introvertido do grupo!" },
-  { id: "7", nome: "Chavosa", img: "/img/chavosa.png", idade: "3 anos", desc: "Chavosa é extremamente fofa e estilosa!" },
-  { id: "8", nome: "Leo", img: "/img/Leo.png", idade: "6 meses", desc: "Leo adora brincar com os outros gatos, super extrovertido!" },
-  { id: "9", nome: "João", img: "/img/Joao.png", idade: "10 meses", desc: "João é muito animado, tem muita energia pra gastar!" },
-  { id: "10", nome: "3 Marias", img: "/img/marias.png", idade: "1 ano", desc: "As Marias são irmãs que cresceram juntas e não podem se separar!" },
-  { id: "11", nome: "Melo", img: "/img/melo.png", idade: "3 anos", desc: "Caramelo mais divertido de todos!" },
-  { id: "12", nome: "Let", img: "/img/let.png", idade: "6 meses", desc: "Let adora brincar com os outros gatos, super extrovertido!" }
-];
-
 export default function QueroAdotar() {
-  const [pets, setPets] = useState([]);
+  const pets = useTabela("pets");
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const savedPets = localStorage.getItem("cafofo_pets");
-    if (savedPets) {
-      setPets(JSON.parse(savedPets));
-    } else {
-      localStorage.setItem("cafofo_pets", JSON.stringify(initialPets));
-      setPets(initialPets);
-    }
-  }, []);
-
   const handleDelete = (id) => {
     if (window.confirm("Deseja realmente remover este pet?")) {
-      const updated = pets.filter((pet) => pet.id !== id);
-      setPets(updated);
-      localStorage.setItem("cafofo_pets", JSON.stringify(updated));
+      excluir("pets", id);
     }
   };
 
