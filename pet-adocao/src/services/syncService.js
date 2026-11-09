@@ -1,4 +1,4 @@
-import { consultar, executar, gravarLinha, linhaParaObjeto, lerMeta, gravarMeta, ENTIDADES, SYNC } from "./sqlite";
+import { consultar, executar, gravarLinha, linhaParaObjeto, lerMeta, gravarMeta, ENTIDADES, SYNC, DATA_EXEMPLO } from "./sqlite";
 import * as nuvem from "./firestoreSync";
 import { auth, onAuthStateChanged } from "./firebase";
 
@@ -87,15 +87,23 @@ async function baixarDaNuvem() {
     for (const documento of remotos) {
       const id = String(documento.id);
       idsRemotos.add(id);
-      const [local] = consultar(`SELECT sync_status FROM ${tabela} WHERE id = ?`, [id]);
-      if (local && local.sync_status !== SYNC.SINCRONIZADO) continue;
+      const [local] = consultar(`SELECT sync_status, atualizado_em FROM ${tabela} WHERE id = ?`, [id]);
+      const localMaisRecente =
+        local &&
+        local.sync_status !== SYNC.SINCRONIZADO &&
+        local.atualizado_em !== DATA_EXEMPLO &&
+        local.atualizado_em >= (documento.atualizadoEm || "");
+      if (localMaisRecente) continue;
       gravarLinha(entidade, { ...documento, id }, SYNC.SINCRONIZADO);
     }
 
-    const sincronizadas = consultar(`SELECT id FROM ${tabela} WHERE sync_status = ?`, [SYNC.SINCRONIZADO]);
-    for (const { id } of sincronizadas) {
-      if (!idsRemotos.has(id)) {
-        executar(`DELETE FROM ${tabela} WHERE id = ?`, [id]);
+    const locais = consultar(`SELECT id, sync_status, atualizado_em FROM ${tabela}`);
+    for (const linha of locais) {
+      if (idsRemotos.has(linha.id)) continue;
+      const apagadaNaNuvem = linha.sync_status === SYNC.SINCRONIZADO;
+      const exemploDescartavel = linha.atualizado_em === DATA_EXEMPLO && remotos.length > 0;
+      if (apagadaNaNuvem || exemploDescartavel) {
+        executar(`DELETE FROM ${tabela} WHERE id = ?`, [linha.id]);
       }
     }
   }
@@ -123,12 +131,12 @@ export async function sincronizar() {
   sincronizacaoAtual = (async () => {
     atualizarEstado({ online: true, sincronizando: true, erro: null });
     try {
+      await baixarDaNuvem();
+
       do {
         repetirDepois = false;
         await enviarPendentes();
       } while (repetirDepois);
-
-      await baixarDaNuvem();
 
       const agora = new Date().toISOString();
       gravarMeta("ultima_sincronizacao", agora);

@@ -8,6 +8,8 @@ export const SYNC = {
   EXCLUSAO_PENDENTE: "EXCLUSAO_PENDENTE"
 };
 
+export const DATA_EXEMPLO = "1970-01-01T00:00:00.000Z";
+
 export const ENTIDADES = {
   pets: {
     tabela: "pets",
@@ -144,9 +146,11 @@ function popularBancoNovo() {
     }
   };
 
-  const pets = doLocalStorage("cafofo_pets") || petsIniciais;
-  const voluntarios = doLocalStorage("cafofo_volunteers") || voluntariosIniciais;
-  const adocoes = doLocalStorage("cafofo_adoptions") || adocoesIniciais;
+  const exemplo = (lista) => lista.map((item) => ({ ...item, atualizadoEm: DATA_EXEMPLO }));
+
+  const pets = doLocalStorage("cafofo_pets") || exemplo(petsIniciais);
+  const voluntarios = doLocalStorage("cafofo_volunteers") || exemplo(voluntariosIniciais);
+  const adocoes = doLocalStorage("cafofo_adoptions") || exemplo(adocoesIniciais);
 
   pets.forEach((p) => gravarLinha("pets", p, SYNC.PENDENTE));
   voluntarios.forEach((v) => gravarLinha("voluntarios", v, SYNC.PENDENTE));
